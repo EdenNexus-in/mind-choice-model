@@ -1,74 +1,96 @@
-# mind-choice-model — PROS (AI-focused) ✅
-
-**A concise list of benefits for the corrected agent (win>draw>lose; overwrite learning), written for AI researchers and systems.**
+Here is a high-quality README focused on the theoretical and architectural aspects of your agent.
 
 ---
 
-## Quick summary
-This agent is intentionally minimal: it stores a single recent reward per action per situation and uses those values to probabilistically select actions. Despite its simplicity, the corrected configuration offers several useful strengths for research, pedagogy, and rapid experimentation.
+# Probabilistic Contextual Bandit: Rock-Paper-Scissors Agent
 
-## Key advantages
-- **Immediate responsiveness** ⚡
-  - The overwrite rule makes the agent react instantly to new information, enabling fast adaptation when the environment changes.
+## 🧠 Project Overview
 
-- **Extreme simplicity & transparency** 🔍
-  - Internal state is explicit and human-readable (last reward per action). This makes behavior easy to inspect and reason about without complex latent variables.
+This project implements a lightweight **Reinforcement Learning (RL)** agent designed to interact with a stochastic environment (Rock-Paper-Scissors). Unlike rule-based bots that follow hard-coded `if-else` strategies, this agent possesses a "Mind"—a dynamic data structure that maps environmental states to probabilistic action weights.
 
-- **Low computational and memory cost** 💾
-  - Requires minimal storage and computation—suitable for large-scale simulations or resource-limited settings.
-
-- **Deterministic, reproducible updates** 📈
-  - Since updates overwrite with the observed reward, experiments are easy to reproduce and attribute to specific events.
-
-- **Powerful for reward-design testing** 🧪
-  - Because behavior follows reward magnitudes closely, the agent is an excellent tool to validate and visualize the effects of different reward mappings.
-
-- **High interpretability for causal analysis** 🔗
-  - Changes in `mind` map directly to specific (action → reward) observations, aiding causal attribution and blame analysis.
-
-- **Useful as a teaching and demonstration tool** 🎓
-  - It concretely demonstrates core ideas (online update, exploration via proportional sampling, reward-driven policy formation) in a compact, observable form.
-
-- **Fast to simulate and debug** 🐇
-  - Small state and simple rules make it trivial to run many trials, perform sensitivity analyses, and debug unexpected behaviors.
-
-- **Responsive to nonstationary signals** 🔄
-  - Immediate overwrite allows rapid tracking of persistent changes in the environment when quick adaptation is desirable.
-
-<<<<<<< HEAD
-- **Clean experimental baseline** 🎯
-  - Serves as a minimal baseline for comparing more complex learners, isolating the effect of learning-rule structure itself.
+The agent operates as a **Contextual Bandit**, observing a "Sense" (state), making a decision based on current knowledge, and updating its internal model based on the immediate reward received.
 
 ---
 
-Would you like these pros annotated with short one-line recommendations for use-cases where they are particularly beneficial? ✅
+## 🏗 AI Architecture
+
+The agent is built upon the fundamental principles of Reinforcement Learning, specifically utilizing a **Stochastic Policy** with direct value mapping.
+
+### 1. The Environment (State Space)
+
+The environment presents a "Sense" to the agent at every time step .
+
+* **State Space ():** 
+* The state is stochastic and randomly generated, simulating an unpredictable opponent or changing world conditions.
+
+### 2. The Agent's "Mind" (Knowledge Representation)
+
+The agent maintains a state-action value table (stored in `mind`).
+For every state , the agent stores a vector of weights corresponding to the possible actions.
+
+* **Initialization:** When a new state is encountered, the agent initializes with an **Uniform Prior**: . This implies equal probability for all actions (Pure Exploration).
+
+### 3. Decision Making (The Policy)
+
+The agent does not strictly choose the action with the highest value (ArgMax). Instead, it employs a **Softmax-style Probabilistic Policy**. The probability of choosing action  given state  is proportional to its weight .
+
+* **Why this matters:** This ensures the agent maintains **Exploration**. Even if one action has a high weight, there is always a non-zero chance the agent will try a different action, preventing it from getting stuck in local optima.
 
 ---
 
-## How the agent works — plain view 🧠
-- Cycle: the agent *observes a situation*, *samples an action* proportional to stored scores, *receives a scalar reward*, and *overwrites* the chosen action's stored score with that reward. The cycle repeats continuously.
-- Memory: per action per situation the agent keeps **only the last reward** (one-step memory). There is no accumulation, discounting, or temporal credit assignment.
-- Decision rule: actions are sampled proportionally to stored scores (unnormalized weights). Higher stored reward → higher sampling probability.
+## ⟳ The Learning Mechanism
 
-## Real‑world applications & fit 🔧
-- **Reward-design testing**: Quickly validate whether a proposed reward function produces intended behavior. (Great for sanity checks.)
-- **Educational demos**: Demonstrates core RL ideas (online feedback, sampling, policy formation) with minimal overhead.
-- **Rapid prototyping / baselines**: Use as a clean baseline to compare against complex learners and isolate effects of learning-rule changes.
-- **Human-in-the-loop preference elicitation**: Interactive scenarios where immediate feedback is provided by humans and fast responsiveness is desired.
-- **Behavioral simulations**: Model agents with short memory or agents that follow recent signals (e.g., simple market or social simulation prototypes).
+The agent updates its behavior using **One-Step Direct Feedback**. Unlike Deep Q-Networks (DQN) which use gradients, or Temporal Difference learning which uses cumulative averages, this agent uses **Instantaneous Weight Replacement**.
 
-## How to adapt this agent for different domains 🔁
-- **Robotics / control**: use exponential moving average (EMA) or additive updates, add temperature/epsilon for exploration, normalize via softmax, and bound actions for safety.
-- **Recommendation systems**: track counts and average rewards per action, add decay to emphasize recent interactions, and clamp scores (epsilon) to avoid starvation of items.
-- **Finance / trading**: switch to cumulative return signals, add risk-sensitive adjustments (shrink large rewards), and include discounting for future outcomes.
-- **Adversarial / safety‑critical domains**: add robust statistics (median/trimmed mean), clip outliers, and include anomaly detection on incoming rewards.
-- **Nonstationary environments**: adopt smoothing (EMA), increase update frequency, or maintain short and long memory traces to detect trend vs. noise.
+### The Update Rule
 
-## Quick technical changes (one‑line each) ⚙️
-- Replace overwrite with additive or EMA: score = alpha * reward + (1-alpha) * score.
-- Use softmax on scores before sampling to get smooth probabilistic behavior and temperature control.
-- Add epsilon floor: ensure all scores >= epsilon to keep sampling stable.
-- Track counts/averages per action to estimate confidence and reduce volatility.
-=======
-## Provenance & intent 📜
-This repository is intentionally tiny and didactic. Its goal is to convey the mechanics of an online preference-updating agent for research, experimentation, and educational demonstrations.
+Upon taking action  in state  and receiving reward :
+
+This makes the agent highly **reactive**. It immediately shifts its preference based on the most recent outcome, making it adaptable to rapidly changing environments, though potentially unstable in noisy environments.
+
+---
+
+## 🎯 Reward Dynamics
+
+The agent's behavior is shaped entirely by the Reward Function . The current configuration incentivizes specific pairings:
+
+| State (Sense) | Action (Agent) | Outcome Label | Reward () |
+| --- | --- | --- | --- |
+| Any | Same as Sense | **Draw** | **3** |
+| Rock | Scissors | **Win** (Configured) | **5** |
+| Paper | Rock | **Win** (Configured) | **5** |
+| Scissors | Paper | **Win** (Configured) | **5** |
+| Others | Others | **Lose** | **1** |
+
+*Note: The current reward structure heavily incentivizes the "Win" condition (Reward 5), creating a strong bias in the probability distribution toward these specific state-action pairs over time.*
+
+---
+
+## 🚀 Running the Agent
+
+### Prerequisites
+
+* Python 3.x
+
+### Execution
+
+Run the script directly to observe the agent's learning process in real-time.
+
+```bash
+python agent.py
+
+```
+
+### Output Interpretation
+
+* **Sense:** The signal received from the environment.
+* **Act:** The action chosen by the agent's policy.
+* **Got:** The qualitative outcome (Win/Draw/Lose).
+* **Mind:** The raw weights vector, showing how the agent's internal probabilities are shifting.
+
+---
+
+### Would you like me to...
+
+* **Refactor the code** to use a standard Q-Learning update rule () so the agent remembers past experiences better?
+* **Visualize the learning curve** by generating a plot showing how the agent's total reward accumulates over time?
