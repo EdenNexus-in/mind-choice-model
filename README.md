@@ -35,6 +35,7 @@ This agent is intentionally minimal: it stores a single recent reward per action
 - **Responsive to nonstationary signals** 🔄
   - Immediate overwrite allows rapid tracking of persistent changes in the environment when quick adaptation is desirable.
 
+<<<<<<< HEAD
 - **Clean experimental baseline** 🎯
   - Serves as a minimal baseline for comparing more complex learners, isolating the effect of learning-rule structure itself.
 
@@ -68,3 +69,7 @@ Would you like these pros annotated with short one-line recommendations for use-
 - Use softmax on scores before sampling to get smooth probabilistic behavior and temperature control.
 - Add epsilon floor: ensure all scores >= epsilon to keep sampling stable.
 - Track counts/averages per action to estimate confidence and reduce volatility.
+=======
+## Provenance & intent 📜
+This repository is intentionally tiny and didactic. Its goal is to convey the mechanics of an online preference-updating agent for research, experimentation, and educational demonstrations.
+>>>>>>> 675c6c464320a0f7d08070bebaf8564c929c07e6
