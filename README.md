@@ -1,8 +1,4 @@
-Here is a high-quality README focused on the theoretical and architectural aspects of your agent.
-
----
-
-# Probabilistic Contextual Bandit: Rock-Paper-Scissors Agent
+# Probabilistic Contextual Bandit: Mind-Choice Agent
 
 ## 🧠 Project Overview
 
@@ -87,10 +83,3 @@ python agent.py
 * **Act:** The action chosen by the agent's policy.
 * **Got:** The qualitative outcome (Win/Draw/Lose).
 * **Mind:** The raw weights vector, showing how the agent's internal probabilities are shifting.
-
----
-
-### Would you like me to...
-
-* **Refactor the code** to use a standard Q-Learning update rule () so the agent remembers past experiences better?
-* **Visualize the learning curve** by generating a plot showing how the agent's total reward accumulates over time?
