@@ -72,4 +72,3 @@ Would you like these pros annotated with short one-line recommendations for use-
 =======
 ## Provenance & intent 📜
 This repository is intentionally tiny and didactic. Its goal is to convey the mechanics of an online preference-updating agent for research, experimentation, and educational demonstrations.
->>>>>>> 675c6c464320a0f7d08070bebaf8564c929c07e6
