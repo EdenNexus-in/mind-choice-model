@@ -53,7 +53,3 @@ This project is a minimal learning agent that repeatedly observes a simple input
 
 ## Provenance & intent 📜
 This repository is intentionally tiny and didactic. Its goal is to convey the mechanics of an online preference-updating agent for research, experimentation, and educational demonstrations.
-
----
-
-If you want, I can produce a short interpretability guide that maps observed `mind` states to predicted behavior and suggested interventions. Would you like that? ✅
